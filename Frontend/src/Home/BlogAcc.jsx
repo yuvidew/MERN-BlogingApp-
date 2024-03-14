@@ -13,7 +13,7 @@ const BlogAcc = ({ele}) => {
         </h3>
         </Accordion.Header>
       <Accordion.Body>
-      <Image className='theImg w-100 object-fit-cover' src={`../uploads/${ele.imageName}`} />
+      <Image className='theImg w-100 object-fit-cover' src={`/src/uploads/${ele.imageName}`} />
       <div style={{
         fontSize : '1.5rem'
       }} dangerouslySetInnerHTML={{ __html: ele.description }} />
