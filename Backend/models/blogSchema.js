@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const blogSchema = new mongoose.Schema({
-    title : {
+   title : {
         type : String
     },
     imageUrl : {
