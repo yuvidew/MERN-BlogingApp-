@@ -6,6 +6,8 @@ import { Button, Container } from 'react-bootstrap';
 import './CreateBlog.css'
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import useImgUploader from './useImgUploader';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const modules = {
     toolbar: [
@@ -33,24 +35,22 @@ const CreateBlog = () => {
     const [title , setTitle] = useState('')
     const [image , setImage] = useState(null)
     const [des , setDes] = useState('')
+    const [imgUrl , handelImgUploader , isTrue] = useImgUploader()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        const formData = new FormData()
-        formData.append('title' , title)
-        formData.append('description' , des)
-        formData.append('file' , image)
+        const blogData = {
+            title : title,
+            description : des,
+            imageUrl : imgUrl
+        }
 
-        handelBlogSubmit(formData)
+        handelBlogSubmit(blogData)
     };
 
     const handelBlogSubmit = async (data) => {
         try {
-            const res = await axios.post('/api/post/v1/createblog' , data , {
-                    headers : {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                })
+            const res = await axios.post('/api/post/v1/createblog' , data)
             if(res) {
                 enqueueSnackbar('uploading successfully !', { variant: 'success' });
                 setTitle('')
@@ -83,11 +83,21 @@ const CreateBlog = () => {
                         <label htmlFor="uploader" className='w-100 '>
                             Uploader
                         </label>
-                        <input 
-                            type="file" 
-                            className='w-100 border p-3 mt-3' 
-                            onChange={(e) => setImage(e.target.files[0])}
-                        />
+                        <div className="d-flex align-items-center border ">
+                            <input 
+                                type="file" 
+                                className=' border-0 p-3 mt-3 w-75' 
+                                onChange={(e) => setImage(e.target.files[0])}
+                            />
+
+                            <button 
+                                type='button'
+                                className=' btn btn-dark theUploadBtn fs-3'
+                                onClick={() => handelImgUploader(image)}
+                            >
+                                {isTrue ?  <CircularProgress  className='theCircular p-1' size={25} /> : 'upload'}
+                            </button>
+                        </div>
                     </div>
                     <div className="description mt-4 mb-5 ">
                         <label htmlFor="">Description</label>
