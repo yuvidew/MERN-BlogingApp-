@@ -1,18 +1,10 @@
 const blogSchema = require("../models/blogSchema")
 
 const postBlog = async (req , res) => {
-    const {file} = req
-    const {title , description} = req.body
-    console.log(req.body);
+    const {body} = req
+    console.log(body);
     try {
-        const result = new blogSchema({
-            title , 
-            description,
-            imagePath : file.path,
-            imageName : file.filename
-        })
-
-        await result.save()
+        const result = await blogSchema.create(body)
         return res.status(200).json(result)
     } catch (error) {
         return res.status(404).json(error)
